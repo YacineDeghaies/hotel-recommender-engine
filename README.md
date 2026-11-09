@@ -14,10 +14,8 @@ passage for each hotel, along with its similarity score.
 
 ### 1. Install the backend
 
-Set `REPOSITORY_URL` to the GitHub repository URL, then run:
-
 ```bash
-git clone "$REPOSITORY_URL" hotel-recommender-engine
+git clone https://github.com/YacineDeghaies/hotel-recommender-engine.git
 cd hotel-recommender-engine
 
 python3.11 -m venv .venv
