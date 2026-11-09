@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from hotel_recommendation_engine.search.retriever import SearchHit
+from hotel_recommender_engine.search.retriever import SearchHit
 
 
 def aggregate_by_hotel(hits: list[SearchHit], limit: int) -> list[SearchHit]:

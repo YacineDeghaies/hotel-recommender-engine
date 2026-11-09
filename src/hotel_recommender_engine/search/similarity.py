@@ -24,6 +24,7 @@ def top_k_cosine(
     k: int,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Return ``(indices, scores)`` of the ``k`` corpus rows most similar to the query.
+     This function is a reference implementation only to be used by tests.
 
     Parameters
     ----------
@@ -67,8 +68,12 @@ def top_k_cosine(
         where=denominator != 0,
         out=np.zeros_like(dot_products, dtype=np.float32),
     )
-
     # Partition to get the top-k unordered (O(n)), then sort only those k.
+    # [-k:] extract the last k elements at the end, unsorted though..
     top = np.argpartition(scores, -k)[-k:]
+
+    # top[ here comes an array of indices ]
+    # [::-1] reverses the order of the top-k values into a descending order
     top = top[np.argsort(scores[top])[::-1]]
+
     return top, scores[top]

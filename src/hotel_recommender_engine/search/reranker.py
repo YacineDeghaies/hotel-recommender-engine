@@ -7,7 +7,7 @@ from typing import Any
 
 from sentence_transformers import CrossEncoder
 
-from hotel_recommendation_engine.search.retriever import SearchHit
+from hotel_recommender_engine.search.retriever import SearchHit
 
 DEFAULT_RERANK_MODEL = "cross-encoder/ms-marco-MiniLM-L6-v2"
 

@@ -1,15 +1,15 @@
-"""Hotel Search Engine HTTP API (FastAPI).
+"""Hotel Recommender Engine HTTP API (FastAPI).
 
 Run from the repo root:
 
-    uvicorn hotel_recommendation_engine.api.app:app --reload
+    uvicorn hotel_recommender_engine.api.app:app --reload
 
 - Interactive docs:      http://localhost:8000/docs
 - Machine-readable spec:  http://localhost:8000/openapi.json  (frontend generates
   its TypeScript types from this)
 
 The search route uses the persisted Qdrant index built by
-``hotel-search-engine-ingest``. The answer-generation route remains a stub.
+``hotel-recommender-engine-ingest``. The answer-generation route remains a stub.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ from typing import Annotated
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from hotel_recommendation_engine.api.schemas import (
+from hotel_recommender_engine.api.schemas import (
     AskRequest,
     AskResponse,
     Citation,
@@ -30,10 +30,10 @@ from hotel_recommendation_engine.api.schemas import (
     SearchRequest,
     SearchResponse,
 )
-from hotel_recommendation_engine.search.aggregation import aggregate_by_hotel
-from hotel_recommendation_engine.search.reranker import Reranker
-from hotel_recommendation_engine.search.retriever import Retriever
-from hotel_recommendation_engine.search.vectorstore import DEFAULT_COLLECTION
+from hotel_recommender_engine.search.aggregation import aggregate_by_hotel
+from hotel_recommender_engine.search.reranker import Reranker
+from hotel_recommender_engine.search.retriever import Retriever
+from hotel_recommender_engine.search.vectorstore import DEFAULT_COLLECTION
 
 API_VERSION = "0.1.0"
 SEARCH_CANDIDATE_MULTIPLIER = 5
@@ -42,12 +42,12 @@ MAX_SEARCH_CANDIDATES = 250
 # Comma-separated list of allowed browser origins. Defaults cover a Next.js dev
 # server (3000) and a Vite dev server (5173).
 CORS_ORIGINS = os.getenv(
-    "HOTEL_SEARCH_ENGINE_CORS_ORIGINS",
+    "HOTEL_RECOMMENDER_ENGINE_CORS_ORIGINS",
     "http://localhost:3000,http://localhost:5173",
 ).split(",")
 
 app = FastAPI(
-    title="Hotel Search Engine API",
+    title="Hotel Recommender Engine API",
     version=API_VERSION,
     summary="Semantic search and RAG over hotel reviews.",
 )
@@ -65,9 +65,9 @@ app.add_middleware(
 def get_retriever() -> Retriever:
     """Connect once to the configured hotel-review index."""
     return Retriever.connect(
-        collection=os.getenv("HOTEL_SEARCH_ENGINE_COLLECTION", DEFAULT_COLLECTION),
-        url=os.getenv("HOTEL_SEARCH_ENGINE_QDRANT_URL") or None,
-        path=os.getenv("HOTEL_SEARCH_ENGINE_QDRANT_PATH", "data/qdrant"),
+        collection=os.getenv("HOTEL_RECOMMENDER_ENGINE_COLLECTION", DEFAULT_COLLECTION),
+        url=os.getenv("HOTEL_RECOMMENDER_ENGINE_QDRANT_URL") or None,
+        path=os.getenv("HOTEL_RECOMMENDER_ENGINE_QDRANT_PATH", "data/qdrant"),
     )
 
 
@@ -122,7 +122,7 @@ def ask(req: AskRequest) -> AskResponse:
     """Retrieve context, then return a generated answer grounded in it.
 
     STUB: retrieve top-k reviews, then call the (not yet written)
-    `hotel_recommendation_engine.generator` which prompts Claude and returns an answer + citations.
+    `hotel_recommender_engine.generator` which prompts Claude and returns an answer + citations.
     """
     return AskResponse(
         query=req.query,

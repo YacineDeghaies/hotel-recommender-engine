@@ -1,4 +1,4 @@
-# Hotel Recommendation Engine
+# Hotel Recommender Engine
 
 A full-stack semantic search application for discovering hotels in Paris through
 real guest reviews. Users describe the stay they want in natural language, and
@@ -14,9 +14,11 @@ passage for each hotel, along with its similarity score.
 
 ### 1. Install the backend
 
+Set `REPOSITORY_URL` to the GitHub repository URL, then run:
+
 ```bash
-git clone https://github.com/YacineDeghaies/hotel_recommendation_engine.git hotel-search-engine
-cd hotel-search-engine
+git clone "$REPOSITORY_URL" hotel-recommender-engine
+cd hotel-recommender-engine
 
 python3.11 -m venv .venv
 source .venv/bin/activate
@@ -27,7 +29,7 @@ python -m pip install -e ".[dev]"
 ### 2. Build the search index
 
 ```bash
-hotel-search-engine-ingest --locality Paris
+hotel-recommender-engine-ingest --locality Paris
 ```
 
 This downloads the review dataset and embedding model, then writes the local
@@ -38,7 +40,7 @@ upsert into an existing collection.
 ### 3. Verify search from the CLI
 
 ```bash
-hotel-search-engine-search "a quiet hotel near the Louvre" -k 5
+hotel-recommender-engine-search "a quiet hotel near the Louvre" -k 5
 ```
 
 The CLI returns review-level matches, so a hotel can appear more than once.
@@ -47,7 +49,7 @@ The API and frontend group matches by hotel.
 ### 4. Start the API
 
 ```bash
-uvicorn hotel_recommendation_engine.api.app:app --reload
+uvicorn hotel_recommender_engine.api.app:app --reload
 ```
 
 The API is available at `http://localhost:8000`. Interactive documentation is
@@ -69,6 +71,24 @@ npm run dev
 
 Open `http://localhost:5173`. During development, Vite proxies `/api` requests
 to FastAPI at `http://localhost:8000`.
+
+## Run with Docker
+
+With Docker and Docker Compose installed, build the images, create the Paris
+search index, and start the app:
+
+```bash
+docker compose build
+docker compose run --rm ingest
+docker compose up -d
+```
+
+Open `http://localhost:8080` for the frontend or `http://localhost:8000/docs`
+for the API documentation. The first ingestion downloads the review dataset and
+embedding model. The first search downloads the reranker model. Docker volumes
+keep the Qdrant index and model downloads across restarts. Run the ingestion
+command again when you want to rebuild the index; it recreates the collection.
+Stop the stack with `docker compose down`.
 
 ## Key features
 
@@ -182,12 +202,12 @@ The API supports the following environment variables:
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `HOTEL_SEARCH_ENGINE_QDRANT_PATH` | `data/qdrant` | Local Qdrant index path |
-| `HOTEL_SEARCH_ENGINE_QDRANT_URL` | Unset | Remote Qdrant server URL |
-| `HOTEL_SEARCH_ENGINE_COLLECTION` | `hotel_reviews` | Qdrant collection name |
-| `HOTEL_SEARCH_ENGINE_CORS_ORIGINS` | `http://localhost:3000,http://localhost:5173` | Comma-separated browser origins |
+| `HOTEL_RECOMMENDER_ENGINE_QDRANT_PATH` | `data/qdrant` | Local Qdrant index path |
+| `HOTEL_RECOMMENDER_ENGINE_QDRANT_URL` | Unset | Remote Qdrant server URL |
+| `HOTEL_RECOMMENDER_ENGINE_COLLECTION` | `hotel_reviews` | Qdrant collection name |
+| `HOTEL_RECOMMENDER_ENGINE_CORS_ORIGINS` | `http://localhost:3000,http://localhost:5173` | Comma-separated browser origins |
 
-When `HOTEL_SEARCH_ENGINE_QDRANT_URL` is set, the API uses the remote server
+When `HOTEL_RECOMMENDER_ENGINE_QDRANT_URL` is set, the API uses the remote server
 instead of the embedded local database.
 
 The ingestion and CLI commands also accept `--qdrant-url`, `--qdrant-path`, and
@@ -199,9 +219,9 @@ run local commands from the repository root so relative paths resolve consistent
 ## Project structure
 
 ```text
-hotel-search-engine/
+hotel-recommender-engine/
 ├── frontend/                       # React and TypeScript application
-├── src/hotel_recommendation_engine/
+├── src/hotel_recommender_engine/
 │   ├── api/                        # FastAPI routes and schemas
 │   ├── search/                     # Chunking, embeddings, retrieval, and Qdrant
 │   ├── data.py                     # Dataset loading and cleaning
@@ -212,8 +232,8 @@ hotel-search-engine/
 └── README.md
 ```
 
-The installable project name is `hotel-recommendation-engine`. Python imports use
-`hotel_recommendation_engine` because Python module names cannot contain hyphens.
+The installable project name is `hotel-recommender-engine`. Python imports use
+`hotel_recommender_engine` because Python module names cannot contain hyphens.
 
 ## Development
 

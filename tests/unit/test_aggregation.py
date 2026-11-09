@@ -1,7 +1,7 @@
 import pytest
 
-from hotel_recommendation_engine.search.aggregation import aggregate_by_hotel
-from hotel_recommendation_engine.search.retriever import SearchHit
+from hotel_recommender_engine.search.aggregation import aggregate_by_hotel
+from hotel_recommender_engine.search.retriever import SearchHit
 
 
 def _hit(id_: str, hotel: str | None, score: float) -> SearchHit:

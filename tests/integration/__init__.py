@@ -1,1 +1,1 @@
-"""Integration tests for Hotel Search Engine."""
+"""Integration tests for Hotel Recommender Engine."""

@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from hotel_recommendation_engine.search.embeddings import Embedder
-from hotel_recommendation_engine.search.vectorstore import DEFAULT_COLLECTION, Document, QdrantStore
+from hotel_recommender_engine.search.embeddings import Embedder
+from hotel_recommender_engine.search.vectorstore import DEFAULT_COLLECTION, Document, QdrantStore
 
 
 @dataclass(frozen=True)

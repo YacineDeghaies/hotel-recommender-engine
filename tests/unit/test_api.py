@@ -1,9 +1,9 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from hotel_recommendation_engine.api.app import app, get_reranker, get_retriever
-from hotel_recommendation_engine.search.reranker import Reranker
-from hotel_recommendation_engine.search.retriever import SearchHit
+from hotel_recommender_engine.api.app import app, get_reranker, get_retriever
+from hotel_recommender_engine.search.reranker import Reranker
+from hotel_recommender_engine.search.retriever import SearchHit
 
 
 class FakeRetriever:
